@@ -150,14 +150,47 @@ interface SlotsToTypes {
 
 type SlotKey = keyof SlotsToTypes;
 
-const slots = new WeakMap();
-export function CreateSlots(container: AnyTemporalType): void {
-  slots.set(container, Object.create(null));
+const globalSlots = new WeakMap();
+
+function _GetSlots<T extends AnyTemporalType>(container: T) {
+  return globalSlots.get(container);
 }
 
-function GetSlots<T extends AnyTemporalType>(container: T) {
-  return slots.get(container);
+const GetSlotsSymbol = Symbol.for('@@Temporal__GetSlots');
+
+// expose GetSlots to avoid dual package hazards
+(globalThis as any)[GetSlotsSymbol] ||= _GetSlots;
+
+const GetSlots = (globalThis as any)[GetSlotsSymbol];
+
+// creates slots and returns SetSlot function
+function _CreateSlots(container: AnyTemporalType) {
+  globalSlots.set(container, Object.create(null));
+
+  function SetSlot<KeyT extends SlotKey>(
+    container: Slots[KeyT]['usedBy'],
+    id: KeyT,
+    value: Slots[KeyT]['value']
+  ): void {
+    const slot = GetSlots(container);
+    
+    if(id in slot) {
+      throw new TypeError(`${id} already has set`)
+    }
+
+    slot[id] = value;
+  }
+
+  return { SetSlot };
 }
+
+const CreateSlotsSymbol = Symbol.for('@@Temporal__CreateSlots');
+
+// expose CreateSlots to avoid dual package hazards
+(globalThis as any)[CreateSlotsSymbol] ||= _CreateSlots;
+
+export const CreateSlots = (globalThis as any)[CreateSlotsSymbol];
+
 // TODO: is there a better way than 9 overloads to make HasSlot into a type
 // guard that takes a variable number of parameters?
 export function HasSlot<ID1 extends SlotKey>(container: unknown, id1: ID1): container is Slots[ID1]['usedBy'];
@@ -281,11 +314,4 @@ export function GetSlot<KeyT extends keyof Slots>(
   const value = GetSlots(container)[id];
   if (value === undefined) throw new TypeError(`Missing internal slot ${id}`);
   return value;
-}
-export function SetSlot<KeyT extends SlotKey>(
-  container: Slots[KeyT]['usedBy'],
-  id: KeyT,
-  value: Slots[KeyT]['value']
-): void {
-  GetSlots(container)[id] = value;
 }

@@ -18,8 +18,7 @@ import {
   NANOSECONDS,
   CreateSlots,
   GetSlot,
-  HasSlot,
-  SetSlot
+  HasSlot
 } from './slots';
 import type { Temporal } from '..';
 import type {
@@ -128,7 +127,7 @@ export class Calendar implements Temporal.Calendar {
 
     const id = ES.ToString(idParam);
     if (!ES.IsBuiltinCalendar(id)) throw new RangeError(`invalid calendar identifier ${id}`);
-    CreateSlots(this);
+    const { SetSlot } = CreateSlots(this);
     SetSlot(this, CALENDAR_ID, id);
 
     if (DEBUG) {

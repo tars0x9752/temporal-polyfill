@@ -1,7 +1,7 @@
 import { DEBUG } from './debug';
 import * as ES from './ecmascript';
 import { MakeIntrinsicClass } from './intrinsicclass';
-import { EPOCHNANOSECONDS, CreateSlots, GetSlot, SetSlot } from './slots';
+import { EPOCHNANOSECONDS, CreateSlots, GetSlot } from './slots';
 import type { Temporal } from '..';
 import { DateTimeFormat } from './intl';
 import type { InstantParams as Params, InstantReturn as Return } from './internaltypes';
@@ -19,7 +19,7 @@ export class Instant implements Temporal.Instant {
 
     const ns = ES.ToBigInt(epochNanoseconds);
     ES.ValidateEpochNanoseconds(ns);
-    CreateSlots(this);
+    const { SetSlot } = CreateSlots(this);
     SetSlot(this, EPOCHNANOSECONDS, ns);
 
     if (DEBUG) {

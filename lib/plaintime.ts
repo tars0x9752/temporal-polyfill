@@ -15,8 +15,7 @@ import {
   CALENDAR,
   EPOCHNANOSECONDS,
   CreateSlots,
-  GetSlot,
-  SetSlot
+  GetSlot
 } from './slots';
 import type { Temporal } from '..';
 import { DateTimeFormat } from './intl';
@@ -80,7 +79,7 @@ export class PlainTime implements Temporal.PlainTime {
     const isoNanosecond = ES.ToIntegerThrowOnInfinity(isoNanosecondParam);
 
     ES.RejectTime(isoHour, isoMinute, isoSecond, isoMillisecond, isoMicrosecond, isoNanosecond);
-    CreateSlots(this);
+    const { SetSlot } = CreateSlots(this);
     SetSlot(this, ISO_HOUR, isoHour);
     SetSlot(this, ISO_MINUTE, isoMinute);
     SetSlot(this, ISO_SECOND, isoSecond);

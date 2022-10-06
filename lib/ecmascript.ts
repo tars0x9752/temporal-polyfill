@@ -45,7 +45,6 @@ import {
   CreateSlots,
   GetSlot,
   HasSlot,
-  SetSlot,
   EPOCHNANOSECONDS,
   TIMEZONE_ID,
   CALENDAR_ID,
@@ -1754,7 +1753,7 @@ export function CreateTemporalDateSlots(
   RejectISODate(isoYear, isoMonth, isoDay);
   RejectDateRange(isoYear, isoMonth, isoDay);
 
-  CreateSlots(result);
+  const { SetSlot } = CreateSlots(result);
   SetSlot(result, ISO_YEAR, isoYear);
   SetSlot(result, ISO_MONTH, isoMonth);
   SetSlot(result, ISO_DAY, isoDay);
@@ -1799,7 +1798,7 @@ export function CreateTemporalDateTimeSlots(
   RejectDateTime(isoYear, isoMonth, isoDay, h, min, s, ms, µs, ns);
   RejectDateTimeRange(isoYear, isoMonth, isoDay, h, min, s, ms, µs, ns);
 
-  CreateSlots(result);
+  const { SetSlot } = CreateSlots(result);
   SetSlot(result, ISO_YEAR, isoYear);
   SetSlot(result, ISO_MONTH, isoMonth);
   SetSlot(result, ISO_DAY, isoDay);
@@ -1849,7 +1848,7 @@ export function CreateTemporalMonthDaySlots(
   RejectISODate(referenceISOYear, isoMonth, isoDay);
   RejectDateRange(referenceISOYear, isoMonth, isoDay);
 
-  CreateSlots(result);
+  const { SetSlot } = CreateSlots(result);
   SetSlot(result, ISO_MONTH, isoMonth);
   SetSlot(result, ISO_DAY, isoDay);
   SetSlot(result, ISO_YEAR, referenceISOYear);
@@ -1888,7 +1887,7 @@ export function CreateTemporalYearMonthSlots(
   RejectISODate(isoYear, isoMonth, referenceISODay);
   RejectYearMonthRange(isoYear, isoMonth);
 
-  CreateSlots(result);
+  const { SetSlot } = CreateSlots(result);
   SetSlot(result, ISO_YEAR, isoYear);
   SetSlot(result, ISO_MONTH, isoMonth);
   SetSlot(result, ISO_DAY, referenceISODay);
@@ -1925,7 +1924,7 @@ export function CreateTemporalZonedDateTimeSlots(
 ) {
   ValidateEpochNanoseconds(epochNanoseconds);
 
-  CreateSlots(result);
+  const { SetSlot } = CreateSlots(result);
   SetSlot(result, EPOCHNANOSECONDS, epochNanoseconds);
   SetSlot(result, TIME_ZONE, timeZone);
   SetSlot(result, CALENDAR, calendar);

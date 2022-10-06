@@ -13,8 +13,7 @@ import {
   MICROSECONDS,
   NANOSECONDS,
   CreateSlots,
-  GetSlot,
-  SetSlot
+  GetSlot
 } from './slots';
 import type { Temporal } from '..';
 import type { DurationParams as Params, DurationReturn as Return } from './internaltypes';
@@ -46,7 +45,7 @@ export class Duration implements Temporal.Duration {
 
     ES.RejectDuration(years, months, weeks, days, hours, minutes, seconds, milliseconds, microseconds, nanoseconds);
 
-    CreateSlots(this);
+    const { SetSlot } = CreateSlots(this);
     SetSlot(this, YEARS, years);
     SetSlot(this, MONTHS, months);
     SetSlot(this, WEEKS, weeks);

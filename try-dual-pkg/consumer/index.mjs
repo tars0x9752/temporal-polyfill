@@ -9,12 +9,12 @@ const zdtB = Temporal.ZonedDateTime.from({
   timeZone: 'Asia/Tokyo',
   year: 2022,
   month: 1,
-  day: 3,
+  day: 2,
   hour: 10
 });
 const zdtC = createCurrentZDT();
 const zdtD = createZDT(2022, 1, 2);
 
-console.log(getDurationInHours(zdtA, zdtB)); // This will throw TypeError: invalid result
-// console.log(getDurationInHours(zdtB, zdtC)); // This will not throw because both are esm
-// console.log(getDurationInHours(zdtA, zdtD)); // This will not throw because both are cjs
+console.log(getDurationInHours(zdtA, zdtB)); // a dual package hazard: this will throw "TypeError: invalid result" if there is no measures against dual package hazard
+console.log(getDurationInHours(zdtB, zdtC)); // not a dual package hazard: This will not throw because both are esm (no duapl package ha)
+console.log(getDurationInHours(zdtA, zdtD)); // not a dual package hazard: This will not throw because both are cjs

@@ -14,8 +14,7 @@ import {
   ISO_MICROSECOND,
   ISO_NANOSECOND,
   CreateSlots,
-  GetSlot,
-  SetSlot
+  GetSlot
 } from './slots';
 import JSBI from 'jsbi';
 import type { Temporal } from '..';
@@ -30,7 +29,7 @@ export class TimeZone implements Temporal.TimeZone {
     }
 
     const timeZoneIdentifier = ES.GetCanonicalTimeZoneIdentifier(timeZoneIdentifierParam);
-    CreateSlots(this);
+    const { SetSlot } = CreateSlots(this);
     SetSlot(this, TIMEZONE_ID, timeZoneIdentifier);
 
     if (DEBUG) {
